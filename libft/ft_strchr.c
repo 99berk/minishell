@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaltinto <aaltinto@student.42kocaeli.com.  +#+  +:+       +#+        */
+/*   By: bakgun <bakgun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/06 20:23:33 by aaltinto          #+#    #+#             */
-/*   Updated: 2023/07/07 12:21:01 by aaltinto         ###   ########.tr       */
+/*   Created: 2023/07/06 20:23:33 by bakgun            #+#    #+#             */
+/*   Updated: 2024/05/24 13:26:38 by bakgun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdlib.h>
 
 char	*ft_strchr(const char *s, int c)
 {

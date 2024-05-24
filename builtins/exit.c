@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: bakgun <bakgun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/13 15:37:30 by alialtintop       #+#    #+#             */
-/*   Updated: 2024/04/24 17:00:33 by bakgun           ###   ########.fr       */
+/*   Created: 2024/04/13 15:37:30 by bakgun            #+#    #+#             */
+/*   Updated: 2024/05/24 12:54:21 by bakgun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../libft/libft.h"
 #include <stdio.h>
 
-int	check_digits(t_vars *vars, char **split)
+static int	check_digits(t_vars *vars, char **split)
 {
 	int		i;
 	int		j;
@@ -28,7 +28,7 @@ int	check_digits(t_vars *vars, char **split)
 			if (j == 0 && (split[i][j] == '+' || split[i][j] == '-'))
 				continue ;
 			if (!ft_isdigit(split[i][j]))
-				return (vars->exit_stat = 255, 
+				return (vars->exit_stat = 255,
 					err_msg("numeric argument required"), 0);
 		}
 	}

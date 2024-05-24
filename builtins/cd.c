@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaltinto <aaltinto@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bakgun <bakgun@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/15 16:12:13 by aaltinto          #+#    #+#             */
-/*   Updated: 2024/03/19 20:01:33 by aaltinto         ###   ########.fr       */
+/*   Created: 2024/03/15 16:12:13 by bakgun            #+#    #+#             */
+/*   Updated: 2024/05/24 12:55:27 by bakgun           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int	get_oldpwd(t_vars *vars)
+static int	get_oldpwd(t_vars *vars)
 {
 	int		i;
 	char	**tmp;
@@ -32,7 +32,7 @@ int	get_oldpwd(t_vars *vars)
 	return (1);
 }
 
-int	create_line(t_vars *vars, char *tmp, int i)
+static int	create_line(t_vars *vars, char *tmp, int i)
 {
 	char	**new_env;
 
@@ -50,12 +50,14 @@ int	create_line(t_vars *vars, char *tmp, int i)
 	return (1);
 }
 
-int	set_env(t_vars *vars, char *to_find, char *to_set)
+static int	set_env(t_vars *vars, char *to_find, char *to_set)
 {
 	int		i;
+	int		count;
 	char	*tmp;
 
-	i = find_in_env(vars->env, to_find, double_counter(vars->env));
+	count = double_counter(vars->env);
+	i = find_in_env(vars->env, to_find, count);
 	tmp = ft_strjoin(to_find, to_set);
 	if (!tmp)
 		return (err_msg("Malloc error"), 0);
@@ -63,31 +65,13 @@ int	set_env(t_vars *vars, char *to_find, char *to_set)
 	{
 		vars->env[i] = ft_strdup(tmp);
 		if (!vars->env[i])
-			return (err_msg("Malloc error"), 0);
+			return (err_msg("Malloc error"),
+				re_init_env(vars, count, 1), null_free(&tmp), 0);
 	}
 	else
 		if (!create_line(vars, tmp, i))
-			return (0);
+			return (null_free(&tmp), 0);
 	return (null_free(&tmp), 1);
-}
-
-char	*get_env(t_vars *vars, char *to_find)
-{
-	int		i;
-	char	**splitted;
-	char	*tmp;
-
-	i = find_in_env(vars->env, to_find, double_counter(vars->env));
-	if (i == -1)
-		return (NULL);
-	splitted = ft_split(vars->env[i], '=');
-	if (!splitted)
-		return (NULL);
-	tmp = ft_strdup(splitted[1]);
-	free_doubles(splitted);
-	if (!tmp)
-		return (NULL);
-	return (tmp);
 }
 
 int	new_cd(t_vars *vars)
@@ -101,10 +85,10 @@ int	new_cd(t_vars *vars)
 	{
 		perror("getcwd");
 		i = find_in_env(vars->env, "PWD=", double_counter(vars->env));
-		if (i == -1)
-			old_path = ft_strdup("..");
-		else
+		if (i != -1)
 			old_path = ft_strdup(vars->env[i] + 4);
+		if (!old_path)
+			return (err_msg("PWD could not set"), 0);
 	}
 	if (ft_strncmp(vars->input_parsed[1], "-", 2) == 0)
 		return (null_free(&old_path), get_oldpwd(vars));
